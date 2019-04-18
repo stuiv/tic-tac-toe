@@ -28,17 +28,31 @@ public class MainActivity extends AppCompatActivity {
         Board.put(R.id.button7, 7);
         Board.put(R.id.button8, 8);
 
-        game = new Game();
-        TextView game_state_text  = findViewById(R.id.gamestate);
-        game_state_text.setText("");
-        TextView newtext  = findViewById(R.id.Status);
-        newtext.setText("✕");
+        if (savedInstanceState != null && savedInstanceState.containsKey("game")) {
+            TextView game_state_text = findViewById(R.id.gamestate);
+            game_state_text.setText("");
+            game = (Game) savedInstanceState.getSerializable("game");
+        }
+        else {
+            TextView game_state_text = findViewById(R.id.gamestate);
+            game_state_text.setText("");
+            TextView newtext = findViewById(R.id.Status);
+            newtext.setText("✕");
+            game = new Game();
+        }
+        UI_game();
+
     }
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable("game", game);
     }
+//    @Override
+//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+//        super.onRestoreInstanceState(savedInstanceState);
+//        savedInstanceState.putSerializable("game", game);
+//    }
 
     public void resetbutton(View v) {
         Button button = (Button) v;
@@ -48,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
             game_state_text.setText("");
         }
     }
+
 
     public void tileClicked(View view) {
         int button_nr = Board.get(view.getId());
@@ -70,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
     public void resetClicked() {
         game = new Game();
         UI_game();
